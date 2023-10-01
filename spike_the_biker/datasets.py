@@ -123,7 +123,8 @@ def get_transforms(augment=True):
     if augment:
         augmented_transforms = [
             transforms.RandomApply([transforms.GaussianBlur(kernel_size=3, sigma=(0.1, 2.0))], p=0.5),
-            transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5)
+            transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5, hue=0.5),
+            transforms.RandomInvert(p=0.3)
         ]
         return transforms.Compose(augmented_transforms + basic_transforms)
     else:
