@@ -1,0 +1,16 @@
+*.pyc
+*.pyo
+*.egg
+*.egg-info
+__pycache__/
+*.log
+
+wandb/
+outputs/
+multirun/
+.hydra/
+
+models/
+data/
+
+.vscode/

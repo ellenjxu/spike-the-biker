@@ -1,0 +1,11 @@
+defaults:
+  - dataset: default
+  - model: default
+
+wandb:
+  project: "comma_hack"
+  job_type: "train_efficientnet"
+
+hydra:
+  run:
+    dir: "."
