@@ -62,22 +62,22 @@ class TrajectoryDataset(Dataset):
         ]  # fetch N future steps
 
         # Extract car positions (x, y) and yaw
-        car_positions = trajectory_data[:, :2]
-        yaw = trajectory_data[0, 2]  # fetch yaw at the current step
+        # car_positions = trajectory_data[:, :2]
+        # yaw = trajectory_data[0, 2]  # fetch yaw at the current step
 
         # Rotate the future car positions into the car's frame
-        relative_positions = car_positions - car_positions[0]  # make relative to current position
-        rotated_positions = rotate_trajectory(relative_positions, yaw)
+        # relative_positions = car_positions - car_positions[0]  # make relative to current position
+        # rotated_positions = rotate_trajectory(relative_positions, yaw)
 
         # get the steering
         steering = trajectory_data[:, 3].reshape(-1, 1)
         # throttle = trajectory_data[:, 5].reshape(-1, 1)
-        trajectory = np.column_stack((rotated_positions, steering))
+        # trajectory = np.column_stack((rotated_positions, steering))
 
         # TODO return steering and throttle as different keys
         # do the hstack in the neural net instead?
         # allows using this same code for steering only or steering + throttle
-        return (image, trajectory.flatten().astype(np.float32))
+        return (image, steering.flatten().astype(np.float32))
 
 
 class CustomDataset(Dataset):

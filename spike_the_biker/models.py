@@ -4,7 +4,7 @@ from torchvision import transforms
 import timm
 
 class EfficientNet(nn.Module):
-    def __init__(self, out_size: int = 40, out_scale: float = 1, freeze_base: bool = True):
+    def __init__(self, out_size: int = 40, out_scale: float = 1, freeze_base: bool = False):
         super().__init__()
         self.out_scale = out_scale
         

@@ -56,6 +56,7 @@ def main(cfg):
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+            wandb.log({"train/loss": loss})
             total_loss += loss.item()
         
         avg_train_loss = total_loss / len(train_loader)
@@ -64,27 +65,27 @@ def main(cfg):
         model.eval()
         val_loss = 0
         with torch.no_grad():
-            model = model.eval()
             for images, labels in val_loader:
                 images, labels = images.to("cuda"), labels.to("cuda")
                 outputs = model(images)
                 loss = criterion(outputs, labels)
                 val_loss += loss.item()
-            model = model.train()
+        model = model.train()
                 
         avg_val_loss = val_loss / len(val_loader)
 
         print(f"\nEpoch {epoch+1}/{cfg.model.epochs}")
         print(f"Train Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}")
 
-        wandb.log({"Train Loss": avg_train_loss, "Validation Loss": avg_val_loss})
+        wandb.log({"validation/loss": avg_val_loss})
 
     # Save model
     dummy_input = torch.randn(1, 3, 224, 224)
-    torch.onnx.export(model, dummy_input, "models/efficientnet.onnx")
-    wandb.save("efficientnet.onnx")
+    torch.onnx.export(model.to("cpu"), dummy_input, "models/efficientnet.onnx")
+    wandb.save("models/efficientnet.onnx")
 
-    wandb.finish()
+    # wandb.finish()
+    # TODO 
 
 if __name__ == "__main__":
     main()
