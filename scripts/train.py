@@ -5,8 +5,8 @@ from torch.utils.data import DataLoader, random_split, default_collate
 import torchvision.transforms as transforms
 import wandb
 from omegaconf import OmegaConf
-from models import EfficientNet
-from datasets import CustomDataset, get_transforms
+from spike_the_biker.models import EfficientNet
+from spike_the_biker.datasets import TrajectoryDataset, get_transforms
 from tqdm import tqdm
 
 @hydra.main(config_path="conf", config_name="config")
@@ -19,7 +19,7 @@ def main(cfg):
     )
 
     #  split
-    dataset = CustomDataset(data_dir=cfg.dataset.data_dir, transform=None)
+    dataset = TrajectoryDataset(root_dir=cfg.dataset.data_dir, N=cfg.dataset.N, transform=None)
     val_len = int(cfg.dataset.validation_split * len(dataset))
     train_len = len(dataset) - val_len
     train_dataset, val_dataset = random_split(dataset, [train_len, val_len])
@@ -35,20 +35,22 @@ def main(cfg):
       return default_collate(list(zip(images, labels))) # back into type Tensor
     
     train_loader = DataLoader(train_dataset, batch_size=cfg.dataset.batch_size, shuffle=True, 
-                              collate_fn=lambda x: collate_transforms(x, train_transform))
+                              collate_fn=lambda x: collate_transforms(x, train_transform), pin_memory=True)
     val_loader = DataLoader(val_dataset, batch_size=cfg.dataset.batch_size, shuffle=False, 
-                            collate_fn=lambda x: collate_transforms(x, val_transform))
+                            collate_fn=lambda x: collate_transforms(x, val_transform), pin_memory=True)
 
     # efficientnet
-    model = EfficientNet()
+    model = EfficientNet(out_size=cfg.model.out_size).to("cuda")
     criterion = torch.nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.model.learning_rate)
 
     # Training loop
-    for epoch in tqdm(range(cfg.model.epochs)):
+    for epoch in range(cfg.model.epochs):
+        print(f"epoch: {epoch}")
         model.train()
         total_loss = 0
-        for images, labels in train_loader:
+        for images, labels in tqdm(train_loader):
+            images, labels = images.to("cuda"), labels.to("cuda")
             optimizer.zero_grad()
             outputs = model(images)
             loss = criterion(outputs, labels)
@@ -62,10 +64,13 @@ def main(cfg):
         model.eval()
         val_loss = 0
         with torch.no_grad():
+            model = model.eval()
             for images, labels in val_loader:
+                images, labels = images.to("cuda"), labels.to("cuda")
                 outputs = model(images)
                 loss = criterion(outputs, labels)
                 val_loss += loss.item()
+            model = model.train()
                 
         avg_val_loss = val_loss / len(val_loader)
 

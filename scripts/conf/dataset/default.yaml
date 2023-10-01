@@ -1,0 +1,4 @@
+data_dir: /home/armand/Dev/skyline/trajectory_optimization/data/render_100k/
+N: 12
+batch_size: 128
+validation_split: 0.2
