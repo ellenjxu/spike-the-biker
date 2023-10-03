@@ -1,4 +1,4 @@
-from trajectory_generation.utils import lwpolyline2ring, lwpolyline2string
+from spike_the_biker.dxf2shapely import lwpolyline2ring, lwpolyline2string
 import shapely.geometry as geom
 import ezdxf
 

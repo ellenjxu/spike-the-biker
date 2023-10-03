@@ -1,7 +1,7 @@
 import numpy as np
 import pygame
 import sys
-from trajectory_generation.floor import Floorplan
+from spike_the_biker.floor import Floorplan
 from shapely.geometry import Point
 from simple_pid import PID
 import random
@@ -12,7 +12,6 @@ ROBOT_WIDTH = 0.15
 RENDER_SCALE = 40 # 50px/m
 
 MAX_X, MAX_Y = 28.0, 28.0 # m
-LOOKAHED = 1 # m
 HUMAN = False
 DRAW = True
 
