@@ -1,4 +1,4 @@
-import matlplotlib.pylot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 def make_vid_from_2d_traj(trajectory_array_1, trajectory_array_2=None):
