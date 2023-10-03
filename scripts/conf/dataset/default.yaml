@@ -1,4 +1,5 @@
-data_dir: /home/armand/Dev/skyline/trajectory_optimization/data/render_100k/
+data_dir: /home/armand/Dev/skyline/trajectory_optimization/data/render_200k_theta/
+data_dir_2: /home/armand/Dev/skyline/trajectory_optimization/data/render_150k/
 N: 12
 batch_size: 128
 validation_split: 0.2
