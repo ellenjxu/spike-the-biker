@@ -14,3 +14,6 @@ winning code for comma hack 4 - an indoor navigation algorithms to make a human-
 (note that this setup/approach works given any 3d render of an environment and a desired trajectory)
 
 ## demo
+<video width="320" height="240" controls>
+  <source src="https://raw.githubusercontent.com/expofx/spike-the-biker/main/demo.mp4" type="video/mp4">
+</video>
